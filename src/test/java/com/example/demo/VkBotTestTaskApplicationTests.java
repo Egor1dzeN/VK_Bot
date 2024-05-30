@@ -3,7 +3,6 @@ package com.example.demo;
 import com.example.demo.entity.Data;
 import com.example.demo.entity.Message;
 import com.example.demo.entity.ObjectData;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
