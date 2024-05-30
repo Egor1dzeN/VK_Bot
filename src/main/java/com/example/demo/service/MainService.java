@@ -1,14 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.config.Configuration;
-import com.example.demo.config.TypeData;
 import com.example.demo.entity.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Random;
 
 @Service
 public class MainService {
@@ -19,27 +18,29 @@ public class MainService {
         if (data.getType().equals("confirmation")) {
             System.out.println("confirmation");
             return configuration.getTokenConfirmation();
+        } else if (data.getType().equals("message_new")){
+            System.out.println(data);
+            sendMessage(data);
         }
-        sendMessage();
         return "ok";
     }
 
-    public void sendMessage() {
+    public void sendMessage(Data data) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "https://api.vk.com/method/messages.send?access_token="+configuration.getTokenAccess()+"&user_id=224004251&random_id=0&message=text&v=5.236";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        Random random = new Random();
+        int rand_id = random.nextInt(10000);
 
-        // Создание тела запроса
-        String jsonBody = "{\"key1\":\"value1\", \"key2\":\"value2\"}";
-
-        // Оберните тело и заголовки запроса в HttpEntity
-        HttpEntity<String> request = new HttpEntity<>(jsonBody, headers);
-
-        // Отправьте POST запрос
+        String tokenAccess = configuration.getTokenAccess();
+        Long userId = data.getObjectData().getMessage().getFrom_id();
+//        System.out.println(userId);
+        String message = "Вы сказали: "+ data.getObjectData().getMessage().getText();
+        String url = "https://api.vk.com/method/messages.send?access_token=" + tokenAccess +
+                "&user_id=" + userId +
+                "&random_id=" + rand_id +
+                "&message=" + message+
+                "&v=5.236";
+        HttpEntity<String> request = new HttpEntity<>("");
         String response = restTemplate.postForObject(url, request, String.class);
-
-        // Обработайте ответ
         System.out.println(response);
     }
 }
