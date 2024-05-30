@@ -1,9 +1,17 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class ObjectData {
-    private Long id;
-    private String text;
+    @JsonProperty("message")
+    private Message message;
+
+    @Override
+    public String toString() {
+        return "ObjectData{" +
+                "message=" + message +
+                '}';
+    }
 }
